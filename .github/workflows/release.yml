@@ -28,7 +28,7 @@ jobs:
         run: python pw install && python pw poetry build
 
       - name: Publish to Pypi
-        run: python pw publish --password $RELEASE_VERSION
+        run: python pw publish --password dummy
 
       - name: Prepare github release
         run: |
