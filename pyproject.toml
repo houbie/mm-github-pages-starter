@@ -30,7 +30,7 @@ enable = true
 vcs = "git"
 style = "semver"
 [tool.poetry-dynamic-versioning.substitution]
-files="src/pyprojectx/wrapper/*"
+files = ["src/pyprojectx/wrapper/*.py"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
@@ -74,7 +74,7 @@ test = "poetry run pytest"
 check-pylint = "pylint src tests"
 check-black = "black src tests --check"
 check = "pw@ check-black && pw@ check-pylint && pw@ test"
-build = "pw@ install && pw@ check && pw@ poetry build && zip wrappers.zip src/pyprojectx/wrapper/pw*"
+build = "pw@ install && pw@ poetry build &&"
 publish = "poetry publish --username __token__ --dry-run"
 
 [tool.pyprojectx.os.win.aliases]
