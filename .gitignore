@@ -8,3 +8,5 @@ Gemfile.lock
 /.changelog.md
 /wrappers.zip
 /dist/
+.pytest_cache/
+__pycache__
