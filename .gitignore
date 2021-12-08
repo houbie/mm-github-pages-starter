@@ -3,3 +3,8 @@ _site
 .jekyll-metadata
 Gemfile.lock
 .idea
+/.pyprojectx/
+/.venv/
+/.changelog.md
+/wrappers.zip
+/dist/

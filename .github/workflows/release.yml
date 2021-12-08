@@ -1,7 +1,9 @@
-name: Build
+name: Release
 
 on:
-  workflow_dispatch
+  push:
+    tags:
+      - "*"
 
 jobs:
   release-pypi:
@@ -9,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
@@ -21,29 +22,20 @@ jobs:
           cache-name: .pyprojectx
         with:
           path: .pyprojectx
-          key: ${{ runner.os }}-pyprojectx
-
-      - name: Set version
-        run: python pw set-version
+          key: pyprojectx
 
       - name: Build
-        run: python pw build
+        run: python pw install && python pw poetry build
 
-      - name: Upload to Pypi
-        run: |
-          pip install twine
-          twine upload --username __token__ --password ${{ secrets.PYPI_TOKEN }} dist/*
+      - name: Publish to Pypi
+        run: python pw publish --password $RELEASE_VERSION
+
       - name: Get Changelog
         id: get-changelog
-        run: |
-          awk '/-{3,}/{flag=1;next}/Release/{if (flag==1)exit}flag' CHANGELOG.md > .changelog.md
+        run: awk '/-{3,}/{flag=1;next}/Release/{if (flag==1)exit}flag' CHANGELOG.md > .changelog.md
+
       - name: Create Release
-        uses: actions/create-release@main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref }}
-          release_name: v${{ github.ref }}
           body_path: .changelog.md
-          draft: false
-          prerelease: false
+          files: build/wrappers.zip

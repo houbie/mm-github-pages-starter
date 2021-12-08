@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyprojectx"
-version = "0.9.4"
+version = "0.0.0"
 description = "Execute scripts from pyproject.toml, installing tools on-the-fly"
 license = "MIT"
 authors = ["Houbie <ivo@houbrechts-it.be>"]
@@ -25,8 +25,15 @@ virtualenv = "^20.10.0"
 pytest = "^6.2.5"
 pytest-mock = "^3.6.1"
 
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "semver"
+[tool.poetry-dynamic-versioning.substitution]
+files="src/pyprojectx/wrapper/*"
+
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.black]
@@ -51,7 +58,7 @@ disable = [
 ]
 
 [tool.pyprojectx]
-poetry = "poetry==1.1.11"
+poetry = ["poetry==1.1.11", "poetry-dynamic-versioning==0.13.1"]
 black = "black==21.7b0"
 isort = "isort==5.9.3"
 pylint = "pylint==2.11.1"
@@ -67,8 +74,8 @@ test = "poetry run pytest"
 check-pylint = "pylint src tests"
 check-black = "black src tests --check"
 check = "pw@ check-black && pw@ check-pylint && pw@ test"
-build = "pw@ install && pw@ check && pw@ poetry build"
-publish = "poetry publish --username __token__"
+build = "pw@ install && pw@ check && pw@ poetry build && zip wrappers.zip src/pyprojectx/wrapper/pw*"
+publish = "poetry publish --username __token__ --dry-run"
 
 [tool.pyprojectx.os.win.aliases]
 clean = "rmdir /s/q .venv & rmdir /s/q .pytest_cache & rmdir /s/q dist"
