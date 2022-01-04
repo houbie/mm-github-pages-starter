@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - "*"
+      - "v*"
 
 jobs:
   release-pypi:
@@ -25,7 +25,7 @@ jobs:
           key: pyprojectx
 
       - name: Build
-        run: python pw install && python pw poetry build
+        run: python pw build
 
       - name: Publish to Pypi
         run: python pw publish --password dummy
